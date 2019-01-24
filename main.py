@@ -10,7 +10,7 @@ from discord.ext import commands
 from cogs import defaultcog
 import riot_api
 
-TOKEN = 'NTM2NzczODY3MTUxMTYzNDEy.DybmgQ.WDEH-EdsssAiWIfFg4-TRazHr1A'
+TOKEN = os.environ.get("DISCORD_TOKEN")
 
 
 class Berry(commands.Bot):
