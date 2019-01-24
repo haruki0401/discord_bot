@@ -2,7 +2,10 @@ import os # to hide token
 import urllib.request
 import json
 
-API_KEY = "api_key=" + os.environ.get("RIOT_TOKEN")
+#key
+from key import RIOT_TOKEN
+
+API_KEY = "api_key=" + RIOT_TOKEN
 
 class Riot_api:
 
