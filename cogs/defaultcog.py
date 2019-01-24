@@ -60,3 +60,14 @@ class Defaultcog:
             if SID == "-1":
                 embed = discord.Embed(description = "The Summoner Name you entered does not exist.", color=0xeee657)
                 await self.bot.say(embed = embed)
+
+            else:
+                # first attribute : solo, second : flex
+                RANK = self.riot.getRank(SID)
+                if RANK == '-1':
+                    embed = discord.Embed(description = "Something error!", color=0xeee657)
+                    await self.bot.say(embed = embed)
+                else:
+                    description = "Solo : " + RANK[0] + "\n" + "Flex : " + RANK[1]
+                    embed = discord.Embed(description = description, color=0xeee657)
+                    await self.bot.say(embed = embed)
