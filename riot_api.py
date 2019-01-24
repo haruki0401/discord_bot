@@ -2,7 +2,7 @@ import os # to hide token
 import urllib.request
 import json
 
-API_KEY = "api_key=" + os.environ.get("RIOT_TOKEN")
+API_KEY = "api_key=" + 'RGAPI-31922a3b-9cd1-478a-80ba-b84bfb0f51df'
 
 class Riot_api:
 
