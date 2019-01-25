@@ -68,7 +68,7 @@ class Defaultcog(commands.Bot):
                         
     #get rank info
     async def on_message(self, message):
-        if (message.content.startswith('/rank') or message.content.startswith('/r')) and message.channel.id == '536814382705934338':
+        if (message.content.startswith('?rank') or message.content.startswith('?r')) and message.channel.id == '536814382705934338':
             query = message.content
             if message.content.startswith('/rank'):
                 query = query[5:]
@@ -84,6 +84,13 @@ class Defaultcog(commands.Bot):
             #print(len(SNs))
 
             for SN in SNs:
+
+                #remove lobby msg
+                lobby_msg = "がロビーに参加しました"
+                index = SN.find(lobby_msg)
+                if index != -1:
+                    SN = SN[:index]
+
                 #print(SN)
                 SID = self.riot.getID(SN)   
                 
