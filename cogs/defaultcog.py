@@ -24,9 +24,14 @@ class Defaultcog:
                 embed = discord.Embed(description = "please enter 2 parameters!", color=0xeee657)
                 await self.bot.say(embed = embed)
             else:
-                ans = int(args[0]) + int(args[1])
-                embed = discord.Embed(description = ans, color=0xeee657)
-                await self.bot.say(embed = embed) 
+                if (type(args[0]) is int) and (type(args[1]) is int):
+                    ans = int(args[0]) + int(args[1])
+                    embed = discord.Embed(description = ans, color=0xeee657)
+                    await self.bot.say(embed = embed) 
+                
+                else:
+                    embed = discord.Embed(description = "please enter correct parameters!", color=0xeee657)
+                    await self.bot.say(embed = embed) 
         
     # delete all msg (admin only)
     @commands.command(pass_context=True)
