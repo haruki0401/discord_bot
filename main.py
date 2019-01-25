@@ -14,18 +14,10 @@ from cogs import defaultcog
 import riot_api
 
 
-class Berry(commands.Bot):
-
-    async def on_ready(self):
-        print("-----")
-        print('logged in')
-        print("-----")
-
-
 if __name__ == '__main__':
 
     description = '''Hello there!! I'm Berry^^ THX for using me:D'''
-    bot = Berry(command_prefix = '!', description=description)
+    bot = commands.Bot(command_prefix = '!', description=description)
     riot = riot_api.Riot_api()
 
     bot.add_cog(defaultcog.Defaultcog(bot, riot))
