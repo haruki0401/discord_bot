@@ -2,6 +2,9 @@ import os # to hide token
 import urllib.request
 import json
 
+import traceback
+
+
 #key
 from key import RIOT_TOKEN
 
@@ -20,16 +23,28 @@ class Riot_api:
             s = urllib.request.urlopen(SUMMONER_V4 + SN + '?' + API_KEY)
             summoner_array = json.loads(s.read().decode('utf-8'))
             s.close()
-
             SID = summoner_array["id"]
             print("SID: "+SID)
 
             return SID
-        except: # need more strict direction later
-            print("The Summoner Name you entered does not exist.")
-            SID = "-1"
 
-            return SID
+        
+        except urllib.error.HTTPError as err:
+            if err.code == 401:
+                print("RIOT api_token is not correct.")
+                return "0"
+            elif err.code == 404:
+                print("The Summoner Name you entered does not exist.")
+                return "-1"
+        
+
+        except: # need more strict direction later
+
+            traceback.print_exc()
+            print("Something error!")
+
+            return "-2"
+
 
     def getRank(self, SID: str):
         try:
@@ -62,6 +77,6 @@ class Riot_api:
 
         except:
             print("Something error!")   
-
+            traceback.print_exc()
             return '-1'         
 

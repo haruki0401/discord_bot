@@ -70,7 +70,7 @@ class Defaultcog(commands.Bot):
     async def on_message(self, message):
         if (message.content.startswith('?rank') or message.content.startswith('?r')) and message.channel.id == '536814382705934338':
             query = message.content
-            if message.content.startswith('/rank'):
+            if message.content.startswith('?rank'):
                 query = query[5:]
             else:
                 query = query[2:]
@@ -91,13 +91,20 @@ class Defaultcog(commands.Bot):
                 if index != -1:
                     SN = SN[:index]
 
-                #print(SN)
+                print(SN)
                 SID = self.riot.getID(SN)   
                 
+                
+                if SID == "0":
+                    embed = discord.Embed(description = "RIOT api_token is not correct.Please contact your administrator for assistance.", color=0xeee657)
+                    await self.bot.send_message(message.channel, embed = embed)
+                
+
                 if SID == "-1":
                     embed = discord.Embed(description = "SN : " + SN + " -> does not exist.", color=0xeee657)
                     await self.bot.send_message(message.channel, embed = embed)
 
+                
                 else:
                     # first attribute : solo, second : flex
                     RANK = self.riot.getRank(SID)
