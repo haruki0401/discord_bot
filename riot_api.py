@@ -32,10 +32,10 @@ class Riot_api:
         except urllib.error.HTTPError as err:
             if err.code == 401:
                 print("RIOT api_token is not correct.")
-                return "0"
+                return "401"
             elif err.code == 404:
                 print("The Summoner Name you entered does not exist.")
-                return "-1"
+                return "404"
         
 
         except: # need more strict direction later
@@ -43,7 +43,7 @@ class Riot_api:
             traceback.print_exc()
             print("Something error!")
 
-            return "-2"
+            return "-1"
 
 
     def getRank(self, SID: str):
@@ -80,3 +80,42 @@ class Riot_api:
             traceback.print_exc()
             return '-1'         
 
+    def currentGame(self,SID : str):
+        try:
+            SPECTATOR_V4 = "https://jp1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/"
+            r = urllib.request.urlopen(SPECTATOR_V4 + SID+ '?' + API_KEY)
+            game_array = json.loads(r.read().decode('utf-8'))
+            r.close()
+
+            gameMode = game_array["gameQueueConfigId"]
+
+
+            GAME_MODE = None
+
+            if gameMode == 420:
+                GAME_MODE = "Solo Rank"
+            elif gameMode == 430:
+                GAME_MODE = "Nomal"
+            elif gameMode == 440:
+                GAME_MODE = "Flex Rank"
+            else:
+                return "OTHER" #other game mode
+
+            PLAYERS = game_array["participants"]
+
+            BANNS = game_array["bannedChampions"] 
+
+            TIME = game_array["gameLength"]
+
+            return {'GAME_MODE':GAME_MODE, 'PLAYERS':PLAYERS, 'BANNS':BANNS, 'TIME':TIME}
+
+        except urllib.error.HTTPError as err:
+            if err.code == 404:
+                print("This Summoner is not in game.")
+                return "404"
+
+
+        except:
+            print("Something error!")   
+            traceback.print_exc()
+            return '-1'        

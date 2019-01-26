@@ -1,8 +1,4 @@
-'''
-TO DO
-    - to check whether position rank exsists.
 
-'''
 import os # to hide token
 import discord
 from discord.ext import commands
