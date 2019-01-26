@@ -49,6 +49,7 @@ class Defaultcog(commands.Bot):
     async def clean(self, ctx, *args):
         '''delete all msg (Only admin can usethis command)'''
         if ctx.message.channel.id == '536814382705934338'and ctx.message.author.server_permissions.administrator: # admin only command
+<<<<<<< HEAD
             
             if(len(args) == 0):
                 #all delete
@@ -62,6 +63,21 @@ class Defaultcog(commands.Bot):
                         embed = discord.Embed(description = "deleted all msgs!!", color=0xeee657)
                         await self.bot.say(embed = embed)
             
+=======
+            
+            if(len(args) == 0):
+                #all delete
+                clean_flag = True
+                while (clean_flag):
+                    msgs = [msg async for msg in self.bot.logs_from(ctx.message.channel)]
+                    if len(msgs) > 1: # 1発言以下でdelete_messagesするとエラーになる
+                        await self.bot.delete_messages(msgs)
+                    else:
+                        clean_flag = False
+                        embed = discord.Embed(description = "deleted all msgs!!", color=0xeee657)
+                        await self.bot.say(embed = embed)
+            
+>>>>>>> 7bf77292061dac39544fe78759b33feb50a66f4c
             elif(len(args) == 1 and args[0].isdigit()):
                 msgs = [msg async for msg in self.bot.logs_from(ctx.message.channel, limit = int(args[0]) + 1)]
                 await self.bot.delete_messages(msgs)
@@ -70,7 +86,11 @@ class Defaultcog(commands.Bot):
     async def on_message(self, message):
         if (message.content.startswith('?rank') or message.content.startswith('?r')) and message.channel.id == '536814382705934338':
             query = message.content
+<<<<<<< HEAD
             if message.content.startswith('?rank'):
+=======
+            if message.content.startswith('/rank'):
+>>>>>>> 7bf77292061dac39544fe78759b33feb50a66f4c
                 query = query[5:]
             else:
                 query = query[2:]
@@ -91,6 +111,7 @@ class Defaultcog(commands.Bot):
                 if index != -1:
                     SN = SN[:index]
 
+<<<<<<< HEAD
                 print(SN)
                 SID = self.riot.getID(SN)   
                 
@@ -100,11 +121,19 @@ class Defaultcog(commands.Bot):
                     await self.bot.send_message(message.channel, embed = embed)
                 
 
+=======
+                #print(SN)
+                SID = self.riot.getID(SN)   
+                
+>>>>>>> 7bf77292061dac39544fe78759b33feb50a66f4c
                 if SID == "-1":
                     embed = discord.Embed(description = "SN : " + SN + " -> does not exist.", color=0xeee657)
                     await self.bot.send_message(message.channel, embed = embed)
 
+<<<<<<< HEAD
                 
+=======
+>>>>>>> 7bf77292061dac39544fe78759b33feb50a66f4c
                 else:
                     # first attribute : solo, second : flex
                     RANK = self.riot.getRank(SID)
