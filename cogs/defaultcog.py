@@ -1,15 +1,24 @@
+import os
 import discord
 from discord.ext import commands
 
+from operator import itemgetter#to sort
+
 import traceback
 
+import urllib
+import requests
+
+from PIL import Image
+from io import BytesIO
 
 class Defaultcog(commands.Bot):
     channel_id = ""
 
-    def __init__(self, bot, riot):
+    def __init__(self, bot, riot, google_search):
         self.bot = bot
         self.riot = riot
+        self.google_search = google_search      
 
 
     async def on_ready(self):
@@ -82,7 +91,9 @@ class Defaultcog(commands.Bot):
             elif(len(args) == 1 and args[0].isdigit()):
                 msgs = [msg async for msg in self.bot.logs_from(ctx.message.channel, limit = int(args[0]) + 1)]
                 await self.bot.delete_messages(msgs)
-                            
+ 
+
+
     async def on_message(self, message):
         #no set channel id
         if message.author != self.bot.user and self.channel_id == "" and message.content != "!here":
@@ -179,19 +190,28 @@ class Defaultcog(commands.Bot):
                         embed = discord.Embed(description = GAME['GAME_MODE'], color=0xeee657)
                         await self.bot.send_message(message.channel, embed = embed)
 
+                        GAME['PLAYERS'].sort(key=lambda x: x['teamId'])
+
+                        teamNum = 0
+
                         for PLAYER in GAME['PLAYERS']:
-                            description += PLAYER['summonerName'] + "\n"
+                            if PLAYER['teamId'] != teamNum:
+                                if PLAYER['teamId'] == 100:
+                                    description += "*blue*\n"
+                                    teamNum = 100
+                                elif PLAYER['teamId'] ==200:
+                                    description += "*red*\n"
+                                    teamNum = 200
+
+                            description += "[" + PLAYER['summonerName'] + "]" + "\n"
 
                             #get rank info
                             RANK = self.riot.getRank(PLAYER['summonerId'])
                             if RANK == '-1':
                                 description += "Something error!" + "\n\n"
                             else:
-                                description += "Solo : " + RANK[0] + " " + "Flex : " + RANK[1] + "\n\n"
+                                description += "Solo : " + "**" + RANK[0] + "**" + " " + "Flex : " + "**" + RANK[1] + "**" + "\n\n"
 
-                        m, s = divmod(GAME['TIME'], 60)
-
-                        description += "Time : " + m + " min" + s " sec" + "\n"
 
                         embed = discord.Embed(description = description, color=0xeee657)
                         await self.bot.send_message(message.channel, embed = embed)
@@ -200,3 +220,35 @@ class Defaultcog(commands.Bot):
                     except:
                         print("Something error!")   
                         traceback.print_exc()
+
+
+        #googleImage this command can use anywhere
+        if (message.content.startswith('?image') or message.content.startswith('?i')):
+            query = message.content
+            if message.content.startswith('?image'):
+                query = query[6:]
+            else:
+                query = query[2:]
+
+            if query[0] == " ":
+                query = query[1:]
+
+            print(query)
+
+            result = self.google_search.search(query, 5)
+
+            for i in range(len(result)):
+                print('-> downloading image', str(i + 1).zfill(4))
+
+                try:
+                    r = requests.get(result[i])
+                    img = Image.open(BytesIO(r.content))
+                    img.save("temp.png")
+                    with open("temp.png", 'rb') as img:
+                        await self.bot.send_file(message.channel,img)
+
+                    os.remove("temp.png")
+
+                except:
+                    print('--> could not download image', str(i + 1).zfill(4))
+                    traceback.print_exc()
