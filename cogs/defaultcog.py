@@ -154,42 +154,49 @@ class Defaultcog(commands.Bot):
             SN = query
             SID = self.riot.getID(SN)
 
-            GAME = self.riot.currentGame(SID)
-
-
-
-            if GAME == "404":
-                embed = discord.Embed(description = "This Summoner is not in game.", color=0xeee657)
+            if SID == "404":
+                embed = discord.Embed(description = "SN : " + SN + " -> does not exist.", color=0xeee657)
                 await self.bot.send_message(message.channel, embed = embed)
 
-
-            elif GAME == "OTHER":
-                embed = discord.Embed(description = "This Bot doesn't support this game mode.", color=0xeee657)
-                await self.bot.send_message(message.channel, embed = embed)
-
-            else:#return GAME_MODE, PLAYERS, BANNS, TIME
-
-                try:#to catch error
-                    description = ""
-
-                    embed = discord.Embed(description = GAME['GAME_MODE'], color=0xeee657)
-                    await self.bot.send_message(message.channel, embed = embed)
-
-                    for PLAYER in GAME['PLAYERS']:
-                        description += PLAYER['summonerName'] + "\n"
-
-                        #get rank info
-                        RANK = self.riot.getRank(PLAYER['summonerId'])
-                        if RANK == '-1':
-                            description += "Something error!" + "\n\n"
-                        else:
-                            description += "Solo : " + RANK[0] + " " + "Flex : " + RANK[1] + "\n\n"
+            else:
+                GAME = self.riot.currentGame(SID)
 
 
-                    embed = discord.Embed(description = description, color=0xeee657)
+                if GAME == "404":
+                    embed = discord.Embed(description = "This Summoner is not in game.", color=0xeee657)
                     await self.bot.send_message(message.channel, embed = embed)
 
 
-                except:
-                    print("Something error!")   
-                    traceback.print_exc()
+                elif GAME == "OTHER":
+                    embed = discord.Embed(description = "This Bot doesn't support this game mode.", color=0xeee657)
+                    await self.bot.send_message(message.channel, embed = embed)
+
+                else:#return GAME_MODE, PLAYERS, BANNS, TIME
+
+                    try:#to catch error
+                        description = ""
+
+                        embed = discord.Embed(description = GAME['GAME_MODE'], color=0xeee657)
+                        await self.bot.send_message(message.channel, embed = embed)
+
+                        for PLAYER in GAME['PLAYERS']:
+                            description += PLAYER['summonerName'] + "\n"
+
+                            #get rank info
+                            RANK = self.riot.getRank(PLAYER['summonerId'])
+                            if RANK == '-1':
+                                description += "Something error!" + "\n\n"
+                            else:
+                                description += "Solo : " + RANK[0] + " " + "Flex : " + RANK[1] + "\n\n"
+
+                        m, s = divmod(GAME['TIME'], 60)
+
+                        description += "Time : " + m + " min" + s " sec" + "\n"
+
+                        embed = discord.Embed(description = description, color=0xeee657)
+                        await self.bot.send_message(message.channel, embed = embed)
+
+
+                    except:
+                        print("Something error!")   
+                        traceback.print_exc()

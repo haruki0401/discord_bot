@@ -6,8 +6,11 @@ __pycache__/
 
 berry_bot.jpg
 
-heroku_only
+#heroku_only
 key.py
 Procfile
 requirements.txt
 runtime.txt
+
+#rsync
+sync_command.txt
