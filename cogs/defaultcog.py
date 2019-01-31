@@ -18,7 +18,26 @@ class Defaultcog(commands.Bot):
     def __init__(self, bot, riot, google_search):
         self.bot = bot
         self.riot = riot
-        self.google_search = google_search      
+        self.google_search = google_search
+        self.channel_id = self.get_id()
+
+
+    def set_id(self, id:str):
+        f = open("channel_id.txt", 'w')
+        
+        f.write(id)
+        f.close
+
+    def get_id(self):
+        f = open("channel_id.txt", 'r')
+
+        channel_id = ""
+        for row in f:
+            channel_id = row
+
+        f.close
+
+        return channel_id
 
 
     async def on_ready(self):
@@ -40,6 +59,7 @@ class Defaultcog(commands.Bot):
     async def here(self,ctx):
         if ctx.message.author.server_permissions.administrator:
             self.channel_id = ctx.message.channel.id
+            self.set_id(self.channel_id)
             embed = discord.Embed(description = "Bot channel is set here", color=0xeee657)
             await self.bot.say(embed = embed)
 
