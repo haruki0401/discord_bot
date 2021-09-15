@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 berry_bot.jpg
+riot.txt
 
 #heroku_only
 key.py
@@ -14,5 +15,3 @@ runtime.txt
 
 #rsync
 sync_command.txt
-
-channel_id.txt
